@@ -3,9 +3,7 @@ const cors = require('cors');
 const bodyparser = require("body-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const app = express();
-const port = 9873;
 const secret_key = "2ub3h2vygcsc8s83njbjs";
 app.use(bodyparser.json());
 app.use(cors());
@@ -91,6 +89,27 @@ router.delete('/registrations/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+//post 
+router.put('/registrations/:id', async (req, res) => {
+    try {
+        const registrationId = req.params.id;
+        const updatedData = req.body;
+
+        // Check if the registration exists
+        const existingRegistration = await RegistrationModel.findById(registrationId);
+        if (!existingRegistration) {
+            return res.status(404).json({ error: 'Registration not found' });
+        }
+
+        // Update the registration
+        await RegistrationModel.findByIdAndUpdate(registrationId, updatedData);
+
+        res.status(200).json({ message: 'Registration updated successfully' });
+    } catch (error) {
+        console.error('Error updating registration:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 //login endpoint
 router.post("/login", async (req, res) => {
     try {
@@ -160,5 +179,6 @@ router.get("/", (req, res) => {
 app.use("/api", router);
 
 //server 
-app.listen(port, () => console.log("server is runnign at", port)
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log("server is runnign at", PORT)
 )

@@ -173,7 +173,7 @@ router.post('/reset-password', async (req, res) => {
 });
 //router get 
 router.get("/", (req, res) => {
-    return res.json({ error: "testing ashif reza" })
+    return res.json({ error: "groflex api working correct: endpoint https://groflex-assignment.vercel.app/api" })
 })
 //use router
 app.use("/api", router);
